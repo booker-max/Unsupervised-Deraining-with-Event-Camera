@@ -1,0 +1,20 @@
+{
+    "model_dir": "LN_base/model_saved_redrain/v15ss_e_rcb2m1q4_lp/model",
+    "record_dir": "LN_base/model_saved_redrain/v15ss_e_rcb2m1q4_lp/record",
+    "log_dir": "/output/log",
+    "train_txt_file": "LN_base/Code_redrain/USDerain_v2/mak_data/n_nturain/seq_3/train.txt",
+    "test_txt_file": "LN_base/Code_redrain/USDerain_v2/mak_data/dclgan/test_debug.txt",
+    "log_txt": "LN_base/model_saved_redrain/v15ss_e_rcb2m1q4_lp/log.txt",
+    "h5_file": "LNRain_v2/Redrain/voxel_h5/10/train.h5",
+    "test_h5_file": "LNRain_v2/Redrain/voxel_h5/10/test.h5",
+    "save_freq": 10,
+    "save_threshold": 50,
+    "print_freq": 5,
+    "train_scene_num": 25,
+    "test_scene_num": 8,
+    "num_bins":10,
+    "nf":32,
+    "scale_unetfeats": 32,
+    "sequence_length": 3,
+    "scene_types": ["a1", "a2", "a3", "a4", "b1", "b2", "b3", "b4"]
+}
