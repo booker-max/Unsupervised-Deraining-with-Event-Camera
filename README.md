@@ -11,7 +11,7 @@ Institute of Artificial Intelligence, Hefei Comprehensive National Science Cente
 *Corresponding Author
 
 <div align=center>
-<img src="images/contrastive.PNG">
+<img src="./images/contrastive.PNG">
 </div>
 
 I really like the work [Contrastive Multiview Coding](https://arxiv.org/pdf/1906.05849.pdf) and was greatly inspired.
