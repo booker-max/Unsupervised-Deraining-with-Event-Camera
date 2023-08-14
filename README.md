@@ -11,7 +11,7 @@ Institute of Artificial Intelligence, Hefei Comprehensive National Science Cente
 *Corresponding Author
 
 <div align="center">
-    <img src="images/contrastive.png" width="50%" height="50%">
+    <img src="images/contrastive.png" width="70%" height="70%">
 </div>
 
 🚀
