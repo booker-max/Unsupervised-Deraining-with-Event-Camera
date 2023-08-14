@@ -14,9 +14,8 @@ Institute of Artificial Intelligence, Hefei Comprehensive National Science Cente
 <img src="images/contrastive.png">
 </div>
 
-I really like the work [Contrastive Multiview Coding](https://arxiv.org/pdf/1906.05849.pdf) and was greatly inspired.
 🚀
-**"Humans view the world through many sensory channels, e.g., the long-wavelength light channel, viewed by the left eye, or the high-frequency vibrations channel, heard by the right ear. Each view is noisy and incomplete, but important factors, such as physics, geometry, and semantics, tend to be shared between all views (e.g., a “dog” can be seen, heard, and felt)."**
+**"Humans view the world through many sensory channels, e.g., the long-wavelength light channel, viewed by the left eye, or the high-frequency vibrations channel, heard by the right ear. Each view is noisy and incomplete, but important factors, such as physics, geometry, and semantics, tend to be shared between all views (e.g., a “dog” can be seen, heard, and felt)."**[Contrastive Multiview Coding](https://arxiv.org/pdf/1906.05849.pdf)
 
 
 
