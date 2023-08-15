@@ -1,5 +1,7 @@
 from locale import DAY_3
 import sys
+sys.path.append("./networks/basic")
+sys.path.append("dclgan_util")
 from base_model import BaseModel
 import networks
 from patchnce import PatchNCELoss_Layer as PatchNCELoss
@@ -18,7 +20,6 @@ from numpy import *
 import torch.nn.functional as F
 import commentjson as json
 import itertools
-from ConvLSTM import ConvLSTM
 
 ###DDP
 import torch.distributed as dist
@@ -61,6 +62,56 @@ if True:
         s, _ = torch.max(tensor_flatten, dim=2, keepdim=True)
         outputs = s + (tensor_flatten - s).exp().sum(dim=2, keepdim=True).log()
         return outputs
+
+### modified from https://github.com/Atcold/pytorch-CortexNet/blob/master/model/ConvLSTMCell.py
+
+    class ConvLSTM(nn.Module):
+        
+        def __init__(self, input_size, hidden_size, kernel_size):
+            super(ConvLSTM, self).__init__()
+
+            self.input_size = input_size
+            self.hidden_size = hidden_size
+            pad = kernel_size // 2
+
+            self.Gates = nn.Conv2d(input_size + hidden_size, 4 * hidden_size, kernel_size, padding=pad)
+
+        def forward(self, input_, prev_state=None):
+
+            # get batch and spatial sizes
+            batch_size = input_.data.size()[0]
+            spatial_size = input_.data.size()[2:]
+
+            # generate empty prev_state, if None is provided
+            if prev_state is None:
+                state_size = [batch_size, self.hidden_size] + list(spatial_size)
+                prev_state = (
+                    torch.zeros(state_size).to(input_.device),
+                    torch.zeros(state_size).to(input_.device)
+                )
+
+            prev_hidden, prev_cell = prev_state
+
+            # data size is [batch, channel, height, width]
+            stacked_inputs = torch.cat((input_, prev_hidden), 1)
+            gates = self.Gates(stacked_inputs)
+
+            # chunk across channel dimension
+            in_gate, remember_gate, out_gate, cell_gate = gates.chunk(4, 1)
+
+            # apply sigmoid non linearity
+            in_gate = F.sigmoid(in_gate)
+            remember_gate = F.sigmoid(remember_gate)
+            out_gate = F.sigmoid(out_gate)
+
+            # apply tanh non linearity
+            cell_gate = F.tanh(cell_gate)
+
+            # compute current cell and hidden state
+            cell = (remember_gate * prev_cell) + (in_gate * cell_gate)
+            hidden = out_gate * F.tanh(cell)
+
+            return hidden, cell
 
     class ConvLayer(nn.Module):
 
@@ -350,7 +401,7 @@ if True:
 
             out = self.tail(dec1)
 
-            return out, dec1
+            return out
     
     ## Supervised Attention Module
     class SAM(nn.Module):
@@ -478,10 +529,10 @@ if True:
             fus_rain = self.fus_mm_rain(rain_feat_f, rain_feat_e, bg_feat_e)
             fus_bg = self.fus_mm_bg(bg_feat_f, bg_feat_e, rain_feat_e)
 
-            out_rain, dec_rain = self.decoder_rain(fus_rain)
-            out_bg, dec_bg = self.decoder_bg(fus_bg)
+            out_rain = self.decoder_rain(fus_rain)
+            out_bg = self.decoder_bg(fus_bg)
 
-            return out_rain, out_bg, rain_feat_f, bg_feat_f, feat_e, rain_feat_e, bg_feat_e, fus_rain, fus_bg, dec_rain, dec_bg
+            return out_rain, out_bg, rain_feat_f, bg_feat_f, rain_feat_e, bg_feat_e
 
     class Head_E(nn.Module):
 
@@ -731,6 +782,7 @@ class RMFD(BaseModel):
 
         self.rainy_frame = data["Rain_frame"]
         self.rainy_event = data["Rain_event"]
+        self.clean = data["clean"]
 
         b,c,h,w = self.rainy_frame.shape
 
@@ -744,7 +796,7 @@ class RMFD(BaseModel):
 
         x2, x2_e = self.tem_mof(x1, x1_e)
         
-        self.Pred_rl, self.Pred_bg, self.rain_fea, self.bg_fea, self.fea_raw_E, self.rain_fea_e, self.bg_fea_e, self.rain_fea_fus, self.bg_fea_fus, self.dec_rain_fea, self.dec_bg_fea = self.G_twostream(x2, x2_e) #list
+        self.Pred_rl, self.Pred_bg, self.rain_fea, self.bg_fea, self.rain_fea_e, self.bg_fea_e = self.G_twostream(x2, x2_e) #list
 
     def backward_D_Bg(self):
 
@@ -886,6 +938,15 @@ class RMFD(BaseModel):
             feat_kn_pool, _ = self.netF1(feat_kn, self.opt.num_patches, None)
             feat_q_pool, _ = self.netF2(feat_q, self.opt.num_patches, None)
             feat_kp_pool, _ = self.netF2(feat_q, self.opt.num_patches, None)
+
+            # if self.local_rank == 0:
+
+            #     print(feat_kn[0].shape) # [8, 32, 128, 128]
+            #     print(feat_kn_pool[0].shape) #[2048, 256], 这里的2048=8*256, 8是batch_size，256是num_patches
+            #     print(feat_kn[1].shape) #[8, 64, 64, 64]
+            #     print(feat_kn_pool[1].shape) #[2048, 256], netF中利用几个线性层将特征通道维度扩展到256
+            #     print(feat_kn[2].shape) #[8, 96, 32, 32]
+            #     print(feat_kn_pool[2].shape) #[2048, 256]
 
             total_nce_loss = 0.0
             for f_q, f_kp, f_kn, crit, nce_layer in zip(feat_q_pool, feat_kp_pool, feat_kn_pool, self.criterionNCE, self.nce_layers):
