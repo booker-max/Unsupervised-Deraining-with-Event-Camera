@@ -29,6 +29,9 @@ The entire network is implemented using PyTorch 1.6, Python 3.8, CUDA 11.3 on tw
 sh requirements.sh
 ```
 
+## Dataset
+More data will be released soon.
+
 ## Training stage
    ```
    CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch --nproc_per_node = 1 --master_port 29501 main.py
