@@ -30,7 +30,8 @@ sh requirements.sh
 ```
 
 ## Dataset
-More data will be released soon.
+
+The dataset is being organized and will be released soon.
 
 ## Training stage
    ```
