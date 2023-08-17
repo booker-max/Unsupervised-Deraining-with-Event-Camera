@@ -6,8 +6,6 @@ Jin Wang, Yueyi Zhang*, Wenming Weng, Zhiwei Xiong
 
 University of Science and Technology of China (USTC), Hefei, China
 
-Institute of Artificial Intelligence, Hefei Comprehensive National Science Center, Hefei, China
-
 *Corresponding Author
 
 <div align="center">
