@@ -2,7 +2,7 @@
 
 ## The is official PyTorch implementation of paper "Unsupervised Video Deraining with An Event Camera".
 
-Jin Wang, Yueyi Zhang*, Wenming Weng, Zhiwei Xiong
+Jin Wang, Wenming Weng, Yueyi Zhang*, Zhiwei Xiong
 
 University of Science and Technology of China (USTC), Hefei, China
 
