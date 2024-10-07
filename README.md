@@ -39,10 +39,6 @@ Password: 5eom
    CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch --nproc_per_node=1 --master_port 29501 main.py
    ```
 
-## Contact
-
-If you have any problem with the released code and dataset, please contact me by email (jin01wang@mail.ustc.edu.cn).
-
 ## More Details
 
 The following paths and files are specified in the `./options/v1.json` file:
@@ -55,3 +51,7 @@ The following paths and files are specified in the `./options/v1.json` file:
 - `log_txt`: Path to the log file.
 - `h5_file`: Path to the training dataset (HDF5 format).
 - `test_h5_file`: Path to the test dataset (HDF5 format).
+
+## Contact
+
+If you have any problem with the released code and dataset, please contact me by email (jin01wang@mail.ustc.edu.cn).
