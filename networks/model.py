@@ -1,12 +1,11 @@
 from locale import DAY_3
 import sys
-sys.path.append("./networks/basic")
-sys.path.append("dclgan_util")
-from base_model import BaseModel
-import networks
-from patchnce import PatchNCELoss_Layer as PatchNCELoss
-from image_pool import ImagePool
-from loss_FA import FALoss_max, FALoss_min, FALoss_max_NA
+
+from networks.dclgan_util.image_pool import ImagePool
+from networks.basic import networks as sub_networks
+from networks.basic.base_model import BaseModel
+from networks.basic.loss_FA import FALoss_max, FALoss_min, FALoss_max_NA
+from networks.basic.patchnce import PatchNCELoss_Layer as PatchNCELoss
 import torch.nn as nn
 import torchvision
 import torch.nn.functional as F
@@ -729,7 +728,7 @@ class RMFD(BaseModel):
 
         self.G_twostream = Generator_T(self.args).to(local_rank)
 
-        self.netD_Bg = networks.define_D(opt.output_nc, opt.ndf, opt.netD,
+        self.netD_Bg = sub_networks.define_D(opt.output_nc, opt.ndf, opt.netD,
                                             opt.n_layers_D, opt.normD, opt.init_type, opt.init_gain, opt.no_antialias,
                                             [], opt).to(local_rank)
 
@@ -753,7 +752,7 @@ class RMFD(BaseModel):
         self.optimizers.append(self.optimizer_D)
         
         self.criterionL1 = torch.nn.L1Loss().to(local_rank)
-        self.criterionGAN = networks.GANLoss(opt.gan_mode).to(local_rank)
+        self.criterionGAN = sub_networks.GANLoss(opt.gan_mode).to(local_rank)
         self.fa_min = FALoss_min().to(local_rank)
         self.fa_max = FALoss_max().to(local_rank)
     

@@ -15,8 +15,8 @@ import sys
 from data.dataset_n_n_e import SequenceDataset as SequenceDataset_train
 from data.dataset_n_n_e_test import SequenceDataset as SequenceDataset_test
 from torch.utils.data import DataLoader
-import utils_rmfd
-from tools import batch_PSNR, batch_SSIM, calculate_parameters
+from trainer.utils_rmfd import count_network_parameters
+from trainer.tools import batch_PSNR, batch_SSIM, calculate_parameters
 from networks.model import RMFD
 
 ###DDP
@@ -205,7 +205,7 @@ class trainer:
                 if isinstance(name, str):
                     net = getattr(self.model, name)
 
-                num_params = utils_rmfd.count_network_parameters(net)
+                num_params = count_network_parameters(net)
 
                 all_num_params += num_params
 

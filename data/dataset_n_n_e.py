@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import os
 import sys
-from spatial_transform import Random_crop, ToTorchFormatTensor
+from data.spatial_transform import Random_crop, ToTorchFormatTensor
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import torchvision

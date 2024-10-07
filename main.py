@@ -46,7 +46,7 @@ def main():
     
         parser = argparse.ArgumentParser(description="DCLGAN")
 
-        parser.add_argument('--local_rank', default = -1, type = int, help = "node rank for distributed training")
+        parser.add_argument('--local-rank', default = -1, type = int, help = "node rank for distributed training")
         parser.add_argument('--nce_includes_all_negatives_from_minibatch',
                             type=str2bool, nargs='?', const=True, default=False,
                             help='(used for single image translation) If True, include the negatives from the other samples of the minibatch when computing the contrastive loss. Please see models/patchnce.py for more details.')

@@ -6,3 +6,6 @@ pip install pyiqa -i https://pypi.mirrors.ustc.edu.cn/simple
 pip3 install --upgrade protobuf==3.20.1
 python /data/booker/LN_base/Code_redrain/USDerain_v2/train_mprnet/pytorch-gradual-warmup-lr/setup.py install
 pip install commentjson
+pip install --upgrade numpy
+pip uninstall opencv-python
+pip install opencv-python

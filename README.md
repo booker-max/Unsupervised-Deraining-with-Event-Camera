@@ -31,13 +31,27 @@ sh requirements.sh
 
 ## Dataset
 
-The dataset is being organized and will be released soon.
+Link: [https://rec.ustc.edu.cn/share/e3f573e0-849b-11ef-9860-4ff745dd7f41](https://rec.ustc.edu.cn/share/e3f573e0-849b-11ef-9860-4ff745dd7f41)  
+Password: 5eom
 
 ## Training stage
    ```
-   CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch --nproc_per_node = 1 --master_port 29501 main.py
+   CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch --nproc_per_node=1 --master_port 29501 main.py
    ```
 
 ## Contact
 
 If you have any problem with the released code and dataset, please contact me by email (jin01wang@mail.ustc.edu.cn).
+
+## More Details
+
+The following paths and files are specified in the `./options/v1.json` file:
+
+- `model_dir`: Directory where the model is stored.
+- `record_dir`: Directory where logs are saved.
+- `log_dir`: Directory for TensorBoard logs.
+- `train_txt_file`: Path to the training set file located in the `data` directory.
+- `test_txt_file`: Path to the test set file located in the `data` directory.
+- `log_txt`: Path to the log file.
+- `h5_file`: Path to the training dataset (HDF5 format).
+- `test_h5_file`: Path to the test dataset (HDF5 format).
